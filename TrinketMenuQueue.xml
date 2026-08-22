@@ -177,7 +177,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptQueueInInstance" relativePoint="TOPRIGHT">
 						<Offset>
-							<AbsDimension x="8" y="0"/>
+							<AbsDimension x="100" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
