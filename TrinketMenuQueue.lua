@@ -95,7 +95,7 @@ end
 function TrinketMenu.SortScrollFrameUpdate()
 	local offset = FauxScrollFrame_GetOffset(TrinketMenu_SortScroll)
 	local list = TrinketMenuQueue.Sort[TrinketMenu.CurrentlySorting]
-	FauxScrollFrame_Update(TrinketMenu_SortScroll, list and table.getn(list) or 0, 9, 24)
+	FauxScrollFrame_Update(TrinketMenu_SortScroll, list and table.getn(list) or 0, 9, 20)
 
 	if list then
 		local r,g,b,found

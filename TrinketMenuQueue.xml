@@ -22,7 +22,7 @@
 
 	<Button name="TrinketMenu_SortTemplate" virtual="true">
 		<Size>
-			<AbsDimension x="210" y="24"/>
+			<AbsDimension x="210" y="20"/>
 		</Size>
 		<Layers>
 			<Layer level="ARTWORK">
@@ -168,16 +168,16 @@
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_SubQueueFrame" relativePoint="TOPLEFT">
 						<Offset>
-							<AbsDimension x="40" y="-8"/>
+							<AbsDimension x="8" y="-8"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
 			</CheckButton>
 			<CheckButton name="TrinketMenu_OptQueueOutOfInstance" inherits="TrinketMenu_CheckButtonTemplate">
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptQueueInInstance" relativePoint="BOTTOMLEFT">
+					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptQueueInInstance" relativePoint="TOPRIGHT">
 						<Offset>
-							<AbsDimension x="0" y="2"/>
+							<AbsDimension x="8" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -375,7 +375,7 @@
 				<Anchors>
 					<Anchor point="TOPLEFT">
 						<Offset>
-							<AbsDimension x="32" y="-8"/>
+							<AbsDimension x="32" y="-32"/>
 						</Offset>
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
@@ -491,7 +491,7 @@
 						</Layers>
 						<Scripts>
 							<OnVerticalScroll>
-								FauxScrollFrame_OnVerticalScroll(24, TrinketMenu.SortScrollFrameUpdate)
+								FauxScrollFrame_OnVerticalScroll(20, TrinketMenu.SortScrollFrameUpdate)
 							</OnVerticalScroll>
 							<OnShow>
 								TrinketMenu.SortScrollFrameUpdate()
