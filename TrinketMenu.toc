@@ -1,0 +1,19 @@
+## Interface: 11200
+## Title: TrinketMenu
+## Author: Gello
+## Notes: AddOn to manage trinkets
+## Title-zhCN:|CFF33AAFF[辅助]|R饰品管理器
+## Notes-zhCN:|CFF33AAFFTrinketMenu|R|N显示你装备了的饰品，右键图标设置。
+## X-Repple: 辅助
+## SavedVariables: TrinketMenuOptions
+## SavedVariablesPerCharacter: TrinketMenuPerOptions, TrinketMenuQueue
+TrinketMenu.lua
+TrinketMenu.xml
+TrinketMenuOpt.lua
+TrinketMenuOpt.xml
+TrinketMenuQueue.lua
+TrinketMenuQueue.xml
+localization.lua
+
+
+## X-Turtle-Shell-Version: 1696944653
