@@ -18,7 +18,9 @@ TrinketMenu.CheckOptInfo = {
 {"SetColumns","OFF","Set Menu Columns","Define how many trinkets before the menu will wrap to the next row.\n\nUncheck to let TrinketMenu choose how to wrap the menu."},
 {"LargeCooldown","ON","Large Numbers","Display the cooldown time in a larger font.","CooldownCount"},
 {"ShowHotKeys","ON","Show Key Bindings","Display the key bindings over the equipped trinkets."},
-{"StopOnSwap","OFF","Stop Queue On Swap","Swapping a passive trinket stops an auto queue.  Check this to also stop the auto queue when a clickable trinket is manually swapped in via TrinketMenu.  This will have the most use to those with frequent trinkets marked Priority."}
+{"StopOnSwap","OFF","Stop Queue On Swap","Swapping a passive trinket stops an auto queue.  Check this to also stop the auto queue when a clickable trinket is manually swapped in via TrinketMenu.  This will have the most use to those with frequent trinkets marked Priority."},
+{"QueueInInstance","ON","Queue In Instances","Allow auto queue to run while inside an instance (raid, dungeon, battleground, arena)."},
+{"QueueOutOfInstance","ON","Queue Outside Instances","Allow auto queue to run while outside instances (open world, cities, etc)."}
 }
 
 TrinketMenu.TooltipInfo = {

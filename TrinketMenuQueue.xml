@@ -164,6 +164,24 @@
 			</Layer>
 		</Layers>
 		<Frames>
+			<CheckButton name="TrinketMenu_OptQueueInInstance" inherits="TrinketMenu_CheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_SubQueueFrame" relativePoint="TOPLEFT">
+						<Offset>
+							<AbsDimension x="40" y="-8"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
+			<CheckButton name="TrinketMenu_OptQueueOutOfInstance" inherits="TrinketMenu_CheckButtonTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptQueueInInstance" relativePoint="BOTTOMLEFT">
+						<Offset>
+							<AbsDimension x="0" y="2"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+			</CheckButton>
 			<Button name="TrinketMenu_MoveTop" inherits="TrinketMenu_MoveButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">

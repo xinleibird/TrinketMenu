@@ -35,7 +35,9 @@ TrinketMenu.CheckOptInfo = {
 	{"SetColumns","OFF","设置列表列数","设置饰品选择列表的列数.\n\n不选择此项 TrinketMenu 会自动排列."},
 	{"LargeCooldown","ON","大字体","用更大的字体显示冷却时间.","CooldownCount"},
 	{"ShowHotKeys","ON","显示快捷键","在饰品上显示绑定的快捷键."},
-	{"StopOnSwap","OFF","被动饰品停止排队","当换上一个被动饰品时停止自动排队.  选中这个选项时, 当一个可点击饰品通过 TrinketMenu 被手动换上时同样会停止自动排队.."}
+	{"StopOnSwap","OFF","被动饰品停止排队","当换上一个被动饰品时停止自动排队.  选中这个选项时, 当一个可点击饰品通过 TrinketMenu 被手动换上时同样会停止自动排队.."},
+{"QueueInInstance","ON","副本内启用队列","仅在副本内（团队、副本、战场、竞技场）启用自动换饰品。"},
+{"QueueOutOfInstance","ON","副本外启用队列","仅在副本外（野外、主城等）启用自动换饰品。"}
 }
 
 TrinketMenu.TooltipInfo = {

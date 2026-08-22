@@ -25,7 +25,9 @@ TrinketMenuOptions = {
 	SetColumns = "OFF",			-- whether number of columns in menu is chosen automatically
 	Columns = 4,				-- if SetColumns "ON", number of columns before menu wraps
 	ShowHotKeys = "OFF",		-- whether hotkeys show on trinkets
-	StopOnSwap = "OFF"			-- whether to stop auto queue on all manual swaps
+	StopOnSwap = "OFF",		-- whether to stop auto queue on all manual swaps
+	QueueInInstance = "ON",		-- whether auto queue runs inside instances
+	QueueOutOfInstance = "ON"	-- whether auto queue runs outside instances
 }
 
 -- per-character settings
@@ -274,6 +276,8 @@ function TrinketMenu.Initialize()
 	options.ShowHotKeys = options.ShowHotKeys or "OFF" -- 3.0
 	TrinketMenuPerOptions.ItemsUsed = TrinketMenuPerOptions.ItemsUsed or {} -- 3.0
 	options.StopOnSwap = options.StopOnSwap or "OFF" -- 3.2
+	options.QueueInInstance = options.QueueInInstance or "ON" -- 3.3
+	options.QueueOutOfInstance = options.QueueOutOfInstance or "ON" -- 3.3
 
 	if TrinketMenuPerOptions.XPos and TrinketMenuPerOptions.YPos then
 		TrinketMenu_MainFrame:SetPoint("TOPLEFT","UIParent","BOTTOMLEFT",TrinketMenuPerOptions.XPos,TrinketMenuPerOptions.YPos)
