@@ -148,21 +148,6 @@
 					<TexCoords left=".625" right=".75" top=".25" bottom=".375"/>
 				</DisabledTexture>
 			</Button>
-			<Button name="TrinketMenu_LockButton" inherits="TrinketMenu_SmallButtonTemplate">
-				<Anchors>
-					<Anchor point="TOPRIGHT" relativeTo="TrinketMenu_CloseButton" relativePoint="TOPLEFT">
-						<Offset>
-							<AbsDimension x="-2" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<NormalTexture file="Interface\AddOns\TrinketMenu\Buttons">
-					<TexCoords left=".75" right=".875" top=".125" bottom=".25"/>
-				</NormalTexture>
-				<PushedTexture file="Interface\AddOns\TrinketMenu\Buttons">
-					<TexCoords left=".875" right="1" top=".125" bottom=".25"/>
-				</PushedTexture>
-			</Button>
 
 			<Button name="TrinketMenu_Tab1" inherits="TrinketMenu_TabTemplate" text="Options" id="1">
 				<Anchors>
@@ -398,14 +383,10 @@
 		</Frames>
 		<Scripts>
 			<OnMouseDown>
-				if TrinketMenuOptions.Locked=="OFF" then
-					this:StartMoving()
-				end
+				this:StartMoving()
 			</OnMouseDown>
 			<OnMouseUp>
-				if TrinketMenuOptions.Locked=="OFF" then
-					this:StopMovingOrSizing()
-				end
+				this:StopMovingOrSizing()
 			</OnMouseUp>
 			<OnShow>
 				TrinketMenu.OptFrame_OnShow()

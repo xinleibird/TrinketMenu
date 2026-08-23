@@ -39,7 +39,6 @@ TrinketMenu.CheckOptInfo = {
 }
 
 TrinketMenu.TooltipInfo = {
-	{"TrinketMenu_LockButton","锁定窗口","不能移动,缩放,转动饰品列表."},
 	{"TrinketMenu_Trinket0Check","上面饰品栏自动排队","选中这个选项会让饰品自动排队替换到上面的饰品栏.  你也可以Alt+点击饰品来开关自动排队."},
 	{"TrinketMenu_Trinket1Check","下面饰品栏自动排队","选中这个选项会让饰品自动排队替换到下面的饰品栏.  你也可以Alt+点击饰品来开关自动排队."},
 	{"TrinketMenu_SortPriority","高优先权","当选中这个选项时, 这个饰品会被第一时间装备上, 而不管装备着的饰品是否在冷却中.\n\n当没选中时, 这个饰品不会替换掉没有在冷却中的已装备饰品."},

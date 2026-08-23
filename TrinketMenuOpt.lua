@@ -22,7 +22,6 @@ TrinketMenu.CheckOptInfo = {
 }
 
 TrinketMenu.TooltipInfo = {
-{"TrinketMenu_LockButton","Lock Windows","Prevents the windows from being moved, resized or rotated."},
 {"TrinketMenu_Trinket0Check","Top Trinket Auto Queue","Check this to enable auto queue for this trinket slot.  You can also Alt+Click the trinket slot to toggle Auto Queue."},
 {"TrinketMenu_Trinket1Check","Bottom Trinket Auto Queue","Check this to enable auto queue for this trinket slot.  You can also Alt+Click the trinket slot to toggle Auto Queue."},
 {"TrinketMenu_SortPriority","High Priority","When checked, this trinket will be swapped in as soon as possible, whether the equipped trinket is on cooldown or not.\n\nWhen unchecked, this trinket will not equip over one already worn that's not on cooldown."},
@@ -173,7 +172,6 @@ end
 
 function TrinketMenu.ReflectLock()
 	local c = TrinketMenuOptions.Locked=="ON" and 0 or .5
-	TrinketMenu_OptFrame:SetBackdropBorderColor(c,c,c,1)
 	TrinketMenu_MainFrame:SetBackdropColor(c,c,c,c)
 	TrinketMenu_MainFrame:SetBackdropBorderColor(c,c,c,c*2)
 	TrinketMenu_MenuFrame:SetBackdropColor(c,c,c,c)
@@ -219,10 +217,6 @@ function TrinketMenu.SmallButton_OnClick()
 	PlaySound("igMainMenuOptionCheckBoxOn")
 	if this==TrinketMenu_CloseButton then
 		TrinketMenu_OptFrame:Hide()
-	elseif this==TrinketMenu_LockButton then
-		TrinketMenuOptions.Locked = (TrinketMenuOptions.Locked=="ON") and "OFF" or "ON"
-		TrinketMenu.DockWindows()
-		TrinketMenu.ReflectLock()
 	end
 end
 
