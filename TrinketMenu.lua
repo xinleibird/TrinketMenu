@@ -26,8 +26,8 @@ TrinketMenuOptions = {
 	Columns = 4,				-- if SetColumns "ON", number of columns before menu wraps
 	ShowHotKeys = "OFF",		-- whether hotkeys show on trinkets
 	StopOnSwap = "OFF",		-- whether to stop auto queue on all manual swaps
-	QueueInInstance = "ON",		-- whether auto queue runs inside instances
-	QueueOutOfInstance = "ON"	-- whether auto queue runs outside instances
+	QueueInInstance = {[0]="ON",[1]="ON"},		-- whether auto queue runs inside instances, per trinket slot
+	QueueOutOfInstance = {[0]="ON",[1]="ON"}	-- whether auto queue runs outside instances, per trinket slot
 }
 
 -- per-character settings
@@ -276,8 +276,18 @@ function TrinketMenu.Initialize()
 	options.ShowHotKeys = options.ShowHotKeys or "OFF" -- 3.0
 	TrinketMenuPerOptions.ItemsUsed = TrinketMenuPerOptions.ItemsUsed or {} -- 3.0
 	options.StopOnSwap = options.StopOnSwap or "OFF" -- 3.2
-	options.QueueInInstance = options.QueueInInstance or "ON" -- 3.3
-	options.QueueOutOfInstance = options.QueueOutOfInstance or "ON" -- 3.3
+	-- 3.3 per-queue migration: legacy saved value was a single string; mirror to both trinket slots
+	local function _tm_migrate_queue_flag(v)
+		if type(v) == "table" then
+			v[0] = v[0] or "ON"
+			v[1] = v[1] or "ON"
+			return v
+		end
+		local s = (type(v) == "string") and v or "ON"
+		return {[0]=s,[1]=s}
+	end
+	options.QueueInInstance = _tm_migrate_queue_flag(options.QueueInInstance)
+	options.QueueOutOfInstance = _tm_migrate_queue_flag(options.QueueOutOfInstance)
 
 	if TrinketMenuPerOptions.XPos and TrinketMenuPerOptions.YPos then
 		TrinketMenu_MainFrame:SetPoint("TOPLEFT","UIParent","BOTTOMLEFT",TrinketMenuPerOptions.XPos,TrinketMenuPerOptions.YPos)
@@ -506,8 +516,10 @@ function TrinketMenu.ResetSettings()
 				TinyTooltips = "OFF",		
 				SetColumns = "OFF",			
 				Columns = 4,				
-				ShowHotKeys = "OFF",	
-				StopOnSwap = "OFF"		
+				ShowHotKeys = "OFF",
+				StopOnSwap = "OFF",
+				QueueInInstance = {[0]="ON",[1]="ON"},
+				QueueOutOfInstance = {[0]="ON",[1]="ON"}
 			}
 			TrinketMenuPerOptions=
 			{

@@ -302,11 +302,15 @@ end
 
 -- this function quickly checks if conditions are right for a possible ProcessAutoQueue
 function TrinketMenu.PeriodicQueueCheck()
-	if IsInInstance() and TrinketMenuOptions.QueueInInstance=="OFF" then return end
-	if not IsInInstance() and TrinketMenuOptions.QueueOutOfInstance=="OFF" then return end
 	for i=0,1 do
 		if TrinketMenuQueue.Enabled[i] then
-			TrinketMenu.ProcessAutoQueue(i)
+			if IsInInstance() and TrinketMenuOptions.QueueInInstance[i]=="OFF" then
+				-- skip this queue in instances
+			elseif not IsInInstance() and TrinketMenuOptions.QueueOutOfInstance[i]=="OFF" then
+				-- skip this queue outside instances
+			else
+				TrinketMenu.ProcessAutoQueue(i)
+			end
 		end
 	end
 end

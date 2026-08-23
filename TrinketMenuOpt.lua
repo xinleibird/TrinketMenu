@@ -114,9 +114,14 @@ end
 
 function TrinketMenu.ValidateChecks()
 	local check
+	local which = TrinketMenu.CurrentlySorting or 0
 	for i=1,table.getn(TrinketMenu.CheckOptInfo) do
 		check = TrinketMenu.CheckOptInfo[i]
-		getglobal("TrinketMenu_Opt"..check[1]):SetChecked(TrinketMenuOptions[check[1]]=="ON")
+		if check[1]=="QueueInInstance" or check[1]=="QueueOutOfInstance" then
+			getglobal("TrinketMenu_Opt"..check[1]):SetChecked(TrinketMenuOptions[check[1]][which]=="ON")
+		else
+			getglobal("TrinketMenu_Opt"..check[1]):SetChecked(TrinketMenuOptions[check[1]]=="ON")
+		end
 		if check[5] then
 			if TrinketMenuOptions[check[5]]=="ON" then
 				getglobal("TrinketMenu_Opt"..check[1]):Enable()
@@ -143,7 +148,12 @@ end
 function TrinketMenu.CheckButton_OnClick()
 	local _,_,var = string.find(this:GetName(),"TrinketMenu_Opt(.+)")
 	if TrinketMenuOptions[var] then
-		TrinketMenuOptions[var] = this:GetChecked() and "ON" or "OFF"
+		if var=="QueueInInstance" or var=="QueueOutOfInstance" then
+			local which = TrinketMenu.CurrentlySorting or 0
+			TrinketMenuOptions[var][which] = this:GetChecked() and "ON" or "OFF"
+		else
+			TrinketMenuOptions[var] = this:GetChecked() and "ON" or "OFF"
+		end
 		PlaySound(this:GetChecked() and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
 		TrinketMenu.ValidateChecks()
 	end
