@@ -75,6 +75,10 @@ function TrinketMenu.QueueInit()
 			TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
 			TrinketMenuQueue.ScopeEnabled[which][scope] = TrinketMenuQueue.ScopeEnabled[which][scope] or 1
 			TrinketMenu.PausedQueue[which] = TrinketMenu.PausedQueue[which] or {}
+			-- new users: seed stop marker at position 1 so defaults queue nothing
+			if not TrinketMenuQueue.Sort[which][scope][1] then
+				table.insert(TrinketMenuQueue.Sort[which][scope], 0)
+			end
 		end
 	end
 	TrinketMenu_SubQueueFrame:SetBackdropBorderColor(.3,.3,.3,1)
@@ -190,19 +194,6 @@ end
 -- populates sorts adding any new trinkets
 function TrinketMenu.PopulateSort(which,scope)
 	_tm_ensure_sort(which, scope)
-	local list = TrinketMenuQueue.Sort[which][scope]
-	-- ensure stop marker (id 0) is at position 1; discovered trinkets append after it
-	if not list[1] then
-		table.insert(list, 0)
-	elseif list[1] ~= 0 then
-		for i=1,table.getn(list) do
-			if list[i] == 0 then
-				table.remove(list, i)
-				break
-			end
-		end
-		table.insert(list, 1, 0)
-	end
 	TrinketMenu.AddToSort(which,scope,TrinketMenu.GetID(which+13))
 	TrinketMenu.AddToSort(which,scope,TrinketMenu.GetID((1-which)+13))
 	local equipLoc,id
@@ -215,6 +206,7 @@ function TrinketMenu.PopulateSort(which,scope)
 			end
 		end
 	end
+	TrinketMenu.AddToSort(which,scope,0) -- id 0 is Stop
 end
 
 function TrinketMenu.SortScrollFrameUpdate()
@@ -579,7 +571,6 @@ function TrinketMenu.SetQueue(which,scope,...)
 	elseif arg[1]=="SORT" and table.getn(arg)>1 then
 		local sortidx,inv,bag,slot,id = 1
 		table.setn(list,0)
-		table.insert(list,0) -- id 0 is Stop, placed first so items queue only when dragged above it
 		for i=2,table.getn(arg) do
 			inv,bag,slot = TrinketMenu.FindItem(arg[i],1) -- include inventory
 			if inv then
@@ -590,6 +581,7 @@ function TrinketMenu.SetQueue(which,scope,...)
 				DEFAULT_CHAT_FRAME:AddMessage(errorstub.."Trinket \""..arg[i].."\" not found.")
 			end
 		end
+		table.insert(list,0)
 	else
 		DEFAULT_CHAT_FRAME:AddMessage(errorstub.." Expected ON, OFF, PAUSE, RESUME or SORT+list")
 	end
