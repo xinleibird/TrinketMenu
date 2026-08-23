@@ -18,7 +18,15 @@ TrinketMenu.PausedQueue = {}
 TrinketMenu.CurrentlySortingScope = 0
 
 local function _tm_ensure_sort(which, scope)
-	TrinketMenuQueue.Sort[which] = TrinketMenuQueue.Sort[which] or {}
+	if type(TrinketMenuQueue) ~= "table" then
+		TrinketMenuQueue = {}
+	end
+	if type(TrinketMenuQueue.Sort) ~= "table" then
+		TrinketMenuQueue.Sort = {}
+	end
+	if type(TrinketMenuQueue.Sort[which]) ~= "table" then
+		TrinketMenuQueue.Sort[which] = {}
+	end
 	TrinketMenuQueue.Sort[which][scope] = TrinketMenuQueue.Sort[which][scope] or {}
 	return TrinketMenuQueue.Sort[which][scope]
 end
