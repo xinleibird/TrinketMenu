@@ -626,18 +626,16 @@ function TrinketMenu.MainTrinket_OnClick()
 	elseif IsAltKeyDown() and TrinketMenu.QueueInit and this:GetID()~=18 then
 		this:SetChecked(0)
 		local which = this:GetID()-13
-		local scope = IsInInstance() and 0 or 1
-		TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or {}
-		if TrinketMenuQueue.Enabled[which][scope] then
+		if TrinketMenuQueue.Enabled[which] then
 			TrinketMenu.CombatQueue[this:GetID()-13]=nil
-			TrinketMenuQueue.Enabled[which][scope] = nil
+			TrinketMenuQueue.Enabled[which] = nil
 		else
-			TrinketMenuQueue.Enabled[which][scope] = 1
+			TrinketMenuQueue.Enabled[which] = 1
 		end
 --		TrinketMenuQueue.Enabled[which] = not TrinketMenuQueue.Enabled[which]
 		TrinketMenu.ReflectQueueEnabled()
 		TrinketMenu.UpdateCombatQueue()
-		-- toggle queue
+		-- toggle master queue
 	else
 		UseInventoryItem(this:GetID())
 	end
@@ -652,9 +650,7 @@ function TrinketMenu.MenuTrinket_OnClick()
 		if TrinketMenu.QueueInit and slot~=18 then
 			local _,_,canCooldown = GetContainerItemCooldown(TrinketMenu.BaggedTrinkets[this:GetID()].bag,TrinketMenu.BaggedTrinkets[this:GetID()].slot)
 			if canCooldown==0 or TrinketMenuOptions.StopOnSwap=="ON" then -- if incoming trinket can't go on cooldown
-				local scope = IsInInstance() and 0 or 1
-				TrinketMenuQueue.Enabled[slot-13] = TrinketMenuQueue.Enabled[slot-13] or {}
-				TrinketMenuQueue.Enabled[slot-13][scope] = nil -- turn off autoqueue for current scope
+				TrinketMenuQueue.Enabled[slot-13] = nil -- turn off autoqueue (master)
 				TrinketMenu.ReflectQueueEnabled()
 			end
 		end
@@ -1040,7 +1036,6 @@ end
 
 function TrinketMenu.UpdateCombatQueue()
 	local bag,slot
-	local scope = IsInInstance() and 0 or 1
 	for which=0,1 do
 		local trinket = TrinketMenu.CombatQueue[which]
 		local icon = getglobal("TrinketMenu_Trinket"..which.."Queue")
@@ -1051,7 +1046,7 @@ function TrinketMenu.UpdateCombatQueue()
 				icon:SetTexture(GetContainerItemInfo(bag,slot))
 				icon:Show()
 			end
-		elseif TrinketMenu.QueueInit and TrinketMenuQueue and TrinketMenuQueue.Enabled[which] and TrinketMenuQueue.Enabled[which][scope] then
+		elseif TrinketMenu.QueueInit and TrinketMenuQueue and TrinketMenuQueue.Enabled[which] then
 			icon:SetTexture("Interface\\AddOns\\TrinketMenu\\TrinketMenu-Gear")
 			icon:Show()
 		end

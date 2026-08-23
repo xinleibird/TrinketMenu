@@ -207,6 +207,34 @@
 					</OnClick>
 				</Scripts>
 			</Button>
+			<CheckButton name="TrinketMenu_ScopeEnable0" inherits="TrinketMenu_CheckButtonTemplate" id="0">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_ScopeTab1" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="16" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						TrinketMenu.ScopeEnable_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="TrinketMenu_ScopeEnable1" inherits="TrinketMenu_CheckButtonTemplate" id="1">
+				<Anchors>
+					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_ScopeEnable0" relativePoint="TOPRIGHT">
+						<Offset>
+							<AbsDimension x="100" y="0"/>
+						</Offset>
+					</Anchor>
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						TrinketMenu.ScopeEnable_OnClick()
+					</OnClick>
+				</Scripts>
+			</CheckButton>
 			<Button name="TrinketMenu_MoveTop" inherits="TrinketMenu_MoveButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">

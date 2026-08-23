@@ -1,18 +1,27 @@
 ﻿--[[ TrinketMenuQueue : auto queue system ]]
 
 -- SavedVariable
--- Sort[which][scope], Enabled[which][scope], PausedQueue[which][scope]
+-- Sort[which][scope]         : 4 independent trinket sort lists
+-- Enabled[which]             : master toggle per slot (1D)
+-- ScopeEnabled[which][scope] : per-queue sub toggle (2D)
+-- PausedQueue[which][scope]  : per-queue pause state
+-- A queue runs only if: Enabled[which] AND ScopeEnabled[which][scope]
 -- which = 0 (top, slot13) or 1 (bottom, slot 14)
 -- scope = 0 (instance) or 1 (out of instance)
 TrinketMenuQueue = {
-	Stats = {}, -- indexed by id of trinket, delay, priority and keep
-	Sort = {}, -- Sort[which][scope] = list of trinket ids in order of use
-	Enabled = {} -- Enabled[which][scope] = 1 or nil whether auto queue is on
+	Stats = {},
+	Sort = {},
+	Enabled = {},
+	ScopeEnabled = {}
 }
-TrinketMenu.PausedQueue = {} -- PausedQueue[which][scope] = 1 or nil whether queue is paused
-TrinketMenu.CurrentlySortingScope = 0 -- scope currently shown in SubQueueFrame (0 or 1)
+TrinketMenu.PausedQueue = {}
+TrinketMenu.CurrentlySortingScope = 0
 
--- migrate legacy 1D saved tables into the new 2D shape
+-- migrate legacy saved tables into the new shape
+-- legacy shapes encountered across prior versions:
+--   Sort[which]                : 1D list
+--   Enabled[which] = 1/nil     : 1D single value
+--   Enabled[which] = {[scope]=} : 2D table (previous version)
 local function _tm_queue_migrate()
 	for which=0,1 do
 		local oldSort = TrinketMenuQueue.Sort[which]
@@ -27,17 +36,25 @@ local function _tm_queue_migrate()
 			TrinketMenuQueue.Sort[which][0] = {}
 			TrinketMenuQueue.Sort[which][1] = {}
 		end
-		local oldEnabled = TrinketMenuQueue.Enabled[which]
-		TrinketMenuQueue.Enabled[which] = {}
-		if oldEnabled then
-			TrinketMenuQueue.Enabled[which][0] = oldEnabled
-			TrinketMenuQueue.Enabled[which][1] = oldEnabled
-		end
+
 		local oldPaused = TrinketMenu.PausedQueue[which]
 		TrinketMenu.PausedQueue[which] = {}
 		if oldPaused then
 			TrinketMenu.PausedQueue[which][0] = oldPaused
 			TrinketMenu.PausedQueue[which][1] = oldPaused
+		end
+
+		-- Enabled may be 1D (old) or 2D (previous). Split into master + scope sub-toggles.
+		local oldEnabled = TrinketMenuQueue.Enabled[which]
+		TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
+		if type(oldEnabled) == "table" then
+			-- 2D legacy: Enabled[which] = {[0]=1,[1]=1}
+			TrinketMenuQueue.Enabled[which] = (oldEnabled[0] or oldEnabled[1]) and 1 or nil
+			TrinketMenuQueue.ScopeEnabled[which] = {[0]=oldEnabled[0], [1]=oldEnabled[1]}
+		else
+			-- 1D legacy: Enabled[which] = 1/nil
+			TrinketMenuQueue.Enabled[which] = oldEnabled
+			TrinketMenuQueue.ScopeEnabled[which] = {[0]=oldEnabled, [1]=oldEnabled}
 		end
 	end
 end
@@ -53,8 +70,10 @@ function TrinketMenu.QueueInit()
 	for which=0,1 do
 		for scope=0,1 do
 			_tm_ensure_sort(which, scope)
-			TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or {}
-			TrinketMenuQueue.Enabled[which][scope] = TrinketMenuQueue.Enabled[which][scope] or 1
+			TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or 1
+			TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
+			TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
+			TrinketMenuQueue.ScopeEnabled[which][scope] = TrinketMenuQueue.ScopeEnabled[which][scope] or 1
 			TrinketMenu.PausedQueue[which] = TrinketMenu.PausedQueue[which] or {}
 		end
 	end
@@ -72,9 +91,14 @@ function TrinketMenu.QueueInit()
 end
 
 function TrinketMenu.ReflectQueueEnabled()
-	local scope = TrinketMenu.CurrentlySortingScope or 0
-	getglobal("TrinketMenu_Trinket0Check"):SetChecked(TrinketMenuQueue.Enabled[0] and TrinketMenuQueue.Enabled[0][scope])
-	getglobal("TrinketMenu_Trinket1Check"):SetChecked(TrinketMenuQueue.Enabled[1] and TrinketMenuQueue.Enabled[1][scope])
+	getglobal("TrinketMenu_Trinket0Check"):SetChecked(TrinketMenuQueue.Enabled[0])
+	getglobal("TrinketMenu_Trinket1Check"):SetChecked(TrinketMenuQueue.Enabled[1])
+	local which = TrinketMenu.CurrentlySorting or 0
+	local se = TrinketMenuQueue.ScopeEnabled and TrinketMenuQueue.ScopeEnabled[which] or {}
+	local e0 = getglobal("TrinketMenu_ScopeEnable0")
+	local e1 = getglobal("TrinketMenu_ScopeEnable1")
+	if e0 then e0:SetChecked(se[0]) end
+	if e1 then e1:SetChecked(se[1]) end
 end
 
 function TrinketMenu.OpenSort(which)
@@ -348,9 +372,16 @@ end
 
 function TrinketMenu.TabCheck_OnClick()
 	local which = 3-this:GetID()
-	local scope = TrinketMenu.CurrentlySortingScope or 0
-	TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or {}
-	TrinketMenuQueue.Enabled[which][scope] = this:GetChecked() and 1 or nil
+	TrinketMenuQueue.Enabled[which] = this:GetChecked() and 1 or nil
+	TrinketMenu.UpdateCombatQueue()
+end
+
+function TrinketMenu.ScopeEnable_OnClick()
+	local scope = this:GetID()
+	local which = TrinketMenu.CurrentlySorting or 0
+	TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
+	TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
+	TrinketMenuQueue.ScopeEnabled[which][scope] = this:GetChecked() and 1 or nil
 	TrinketMenu.UpdateCombatQueue()
 end
 
@@ -391,7 +422,10 @@ end
 function TrinketMenu.PeriodicQueueCheck()
 	local scope = IsInInstance() and 0 or 1
 	for i=0,1 do
-		if TrinketMenuQueue.Enabled[i] and TrinketMenuQueue.Enabled[i][scope] then
+		if TrinketMenuQueue.Enabled[i]
+		   and TrinketMenuQueue.ScopeEnabled
+		   and TrinketMenuQueue.ScopeEnabled[i]
+		   and TrinketMenuQueue.ScopeEnabled[i][scope] then
 			TrinketMenu.ProcessAutoQueue(i, scope)
 		end
 	end
@@ -492,14 +526,16 @@ function TrinketMenu.SetQueue(which,scope,...)
 	if TrinketMenu_OptFrame:IsVisible() then
 		TrinketMenu_OptFrame:Hide() -- close option frame if it's up. the mess otherwise would be scary
 	end
-	TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or {}
+	TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or 1
+	TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
+	TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
 	TrinketMenu.PausedQueue[which] = TrinketMenu.PausedQueue[which] or {}
 	local list = _tm_ensure_sort(which, scope)
 	if arg[1]=="ON" then
-		TrinketMenuQueue.Enabled[which][scope]=1
+		TrinketMenuQueue.ScopeEnabled[which][scope]=1
 		TrinketMenu.PausedQueue[which][scope]=nil
 	elseif arg[1]=="OFF" then
-		TrinketMenuQueue.Enabled[which][scope]=nil
+		TrinketMenuQueue.ScopeEnabled[which][scope]=nil
 		TrinketMenu.PausedQueue[which][scope]=nil
 	elseif arg[1]=="PAUSE" then
 		TrinketMenu.PausedQueue[which][scope]=1
@@ -544,6 +580,7 @@ function TrinketMenu.GetQueue(which,scope)
 		name = TrinketMenu.GetNameByID(list[i])
 		table.insert(trinketList,name)
 	end
-	local en = TrinketMenuQueue.Enabled[which] and TrinketMenuQueue.Enabled[which][scope]
+	local se = TrinketMenuQueue.ScopeEnabled and TrinketMenuQueue.ScopeEnabled[which]
+	local en = se and se[scope]
 	return en,trinketList
 end

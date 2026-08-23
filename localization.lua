@@ -61,6 +61,8 @@ TrinketMenu_SortDelayText1:SetText("延迟")
 TrinketMenu_SortDelayText2:SetText("秒")
 TrinketMenu_ScopeTab0:SetText("副本内")
 TrinketMenu_ScopeTab1:SetText("副本外")
+TrinketMenu_ScopeEnable0Text:SetText("副本内启用")
+TrinketMenu_ScopeEnable1Text:SetText("副本外启用")
 --TrinketMenu_SortPriorityText:SetText("优先")
 --TrinketMenu_SortKeepEquippedText:SetText("暂停自动排队")
 
