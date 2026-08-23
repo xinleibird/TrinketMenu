@@ -35,7 +35,7 @@ function TrinketMenu.QueueInit()
 	for which = 0, 1 do
 		for scope = 0, 1 do
 			_tm_ensure_sort(which, scope)
-if TrinketMenuQueue.Enabled[which] == nil then
+			if TrinketMenuQueue.Enabled[which] == nil then
 				TrinketMenuQueue.Enabled[which] = 1
 			end
 			TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
