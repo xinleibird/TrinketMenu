@@ -17,48 +17,6 @@ TrinketMenuQueue = {
 TrinketMenu.PausedQueue = {}
 TrinketMenu.CurrentlySortingScope = 0
 
--- migrate legacy saved tables into the new shape
--- legacy shapes encountered across prior versions:
---   Sort[which]                : 1D list
---   Enabled[which] = 1/nil     : 1D single value
---   Enabled[which] = {[scope]=} : 2D table (previous version)
-local function _tm_queue_migrate()
-	for which = 0, 1 do
-		local oldSort = TrinketMenuQueue.Sort[which]
-		TrinketMenuQueue.Sort[which] = {}
-		if type(oldSort) == "table" then
-			TrinketMenuQueue.Sort[which][0] = oldSort
-			TrinketMenuQueue.Sort[which][1] = {}
-			for i = 1, table.getn(oldSort) do
-				TrinketMenuQueue.Sort[which][1][i] = oldSort[i]
-			end
-		else
-			TrinketMenuQueue.Sort[which][0] = {}
-			TrinketMenuQueue.Sort[which][1] = {}
-		end
-
-		local oldPaused = TrinketMenu.PausedQueue[which]
-		TrinketMenu.PausedQueue[which] = {}
-		if oldPaused then
-			TrinketMenu.PausedQueue[which][0] = oldPaused
-			TrinketMenu.PausedQueue[which][1] = oldPaused
-		end
-
-		-- Enabled may be 1D (old) or 2D (previous). Split into master + scope sub-toggles.
-		local oldEnabled = TrinketMenuQueue.Enabled[which]
-		TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
-		if type(oldEnabled) == "table" then
-			-- 2D legacy: Enabled[which] = {[0]=1,[1]=1}
-			TrinketMenuQueue.Enabled[which] = (oldEnabled[0] or oldEnabled[1]) and 1 or nil
-			TrinketMenuQueue.ScopeEnabled[which] = { [0] = oldEnabled[0], [1] = oldEnabled[1] }
-		else
-			-- 1D legacy: Enabled[which] = 1/nil
-			TrinketMenuQueue.Enabled[which] = oldEnabled
-			TrinketMenuQueue.ScopeEnabled[which] = { [0] = oldEnabled, [1] = oldEnabled }
-		end
-	end
-end
-
 local function _tm_ensure_sort(which, scope)
 	TrinketMenuQueue.Sort[which] = TrinketMenuQueue.Sort[which] or {}
 	TrinketMenuQueue.Sort[which][scope] = TrinketMenuQueue.Sort[which][scope] or {}
@@ -66,7 +24,6 @@ local function _tm_ensure_sort(which, scope)
 end
 
 function TrinketMenu.QueueInit()
-	_tm_queue_migrate()
 	for which = 0, 1 do
 		for scope = 0, 1 do
 			_tm_ensure_sort(which, scope)
