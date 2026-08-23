@@ -27,7 +27,9 @@ function TrinketMenu.QueueInit()
 	for which = 0, 1 do
 		for scope = 0, 1 do
 			_tm_ensure_sort(which, scope)
-			TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or 1
+if TrinketMenuQueue.Enabled[which] == nil then
+				TrinketMenuQueue.Enabled[which] = 1
+			end
 			TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
 			TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
 			TrinketMenuQueue.ScopeEnabled[which][scope] = TrinketMenuQueue.ScopeEnabled[which][scope] or 1
@@ -53,8 +55,8 @@ function TrinketMenu.QueueInit()
 end
 
 function TrinketMenu.ReflectQueueEnabled()
-	getglobal("TrinketMenu_Trinket0Check"):SetChecked(TrinketMenuQueue.Enabled[0])
-	getglobal("TrinketMenu_Trinket1Check"):SetChecked(TrinketMenuQueue.Enabled[1])
+	getglobal("TrinketMenu_Trinket0Check"):SetChecked(TrinketMenuQueue.Enabled[0] == 1)
+	getglobal("TrinketMenu_Trinket1Check"):SetChecked(TrinketMenuQueue.Enabled[1] == 1)
 	local which = TrinketMenu.CurrentlySorting or 0
 	local se = TrinketMenuQueue.ScopeEnabled and TrinketMenuQueue.ScopeEnabled[which] or {}
 	local e0 = getglobal("TrinketMenu_ScopeEnable0")
@@ -378,7 +380,7 @@ end
 
 function TrinketMenu.TabCheck_OnClick()
 	local which = 3 - this:GetID()
-	TrinketMenuQueue.Enabled[which] = this:GetChecked() and 1 or nil
+	TrinketMenuQueue.Enabled[which] = this:GetChecked() and 1 or false
 	TrinketMenu.UpdateCombatQueue()
 end
 
@@ -387,7 +389,7 @@ function TrinketMenu.ScopeEnable_OnClick()
 	local which = TrinketMenu.CurrentlySorting or 0
 	TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
 	TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
-	TrinketMenuQueue.ScopeEnabled[which][scope] = this:GetChecked() and 1 or nil
+	TrinketMenuQueue.ScopeEnabled[which][scope] = this:GetChecked() and 1 or false
 	TrinketMenu.UpdateCombatQueue()
 end
 
@@ -429,10 +431,10 @@ function TrinketMenu.PeriodicQueueCheck()
 	local scope = IsInInstance() and 0 or 1
 	for i = 0, 1 do
 		if
-			TrinketMenuQueue.Enabled[i]
+			TrinketMenuQueue.Enabled[i] == 1
 			and TrinketMenuQueue.ScopeEnabled
 			and TrinketMenuQueue.ScopeEnabled[i]
-			and TrinketMenuQueue.ScopeEnabled[i][scope]
+			and TrinketMenuQueue.ScopeEnabled[i][scope] == 1
 		then
 			TrinketMenu.ProcessAutoQueue(i, scope)
 		end
@@ -550,7 +552,9 @@ function TrinketMenu.SetQueue(which, scope, ...)
 	if TrinketMenu_OptFrame:IsVisible() then
 		TrinketMenu_OptFrame:Hide() -- close option frame if it's up. the mess otherwise would be scary
 	end
-	TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or 1
+	if TrinketMenuQueue.Enabled[which] == nil then
+		TrinketMenuQueue.Enabled[which] = 1
+	end
 	TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
 	TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
 	TrinketMenu.PausedQueue[which] = TrinketMenu.PausedQueue[which] or {}

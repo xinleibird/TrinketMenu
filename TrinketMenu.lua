@@ -678,9 +678,9 @@ function TrinketMenu.MainTrinket_OnClick()
 	elseif IsAltKeyDown() and TrinketMenu.QueueInit and this:GetID() ~= 18 then
 		this:SetChecked(0)
 		local which = this:GetID() - 13
-		if TrinketMenuQueue.Enabled[which] then
+		if TrinketMenuQueue.Enabled[which] == 1 then
 			TrinketMenu.CombatQueue[this:GetID() - 13] = nil
-			TrinketMenuQueue.Enabled[which] = nil
+			TrinketMenuQueue.Enabled[which] = false
 		else
 			TrinketMenuQueue.Enabled[which] = 1
 		end
@@ -710,7 +710,7 @@ function TrinketMenu.MenuTrinket_OnClick()
 				TrinketMenu.BaggedTrinkets[this:GetID()].slot
 			)
 			if canCooldown == 0 or TrinketMenuOptions.StopOnSwap == "ON" then -- if incoming trinket can't go on cooldown
-				TrinketMenuQueue.Enabled[slot - 13] = nil -- turn off autoqueue (master)
+				TrinketMenuQueue.Enabled[slot - 13] = false -- turn off autoqueue (master)
 				TrinketMenu.ReflectQueueEnabled()
 			end
 		end
@@ -1128,7 +1128,7 @@ function TrinketMenu.UpdateCombatQueue()
 				icon:SetTexture(GetContainerItemInfo(bag, slot))
 				icon:Show()
 			end
-		elseif TrinketMenu.QueueInit and TrinketMenuQueue and TrinketMenuQueue.Enabled[which] then
+		elseif TrinketMenu.QueueInit and TrinketMenuQueue and TrinketMenuQueue.Enabled[which] == 1 then
 			icon:SetTexture("Interface\\AddOns\\TrinketMenu\\TrinketMenu-Gear")
 			icon:Show()
 		end
