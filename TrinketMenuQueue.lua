@@ -110,7 +110,7 @@ function TrinketMenu.UpdateScopeEnableVisibility()
 	if not (e0 and e1) then return end
 	e0:ClearAllPoints()
 	e1:ClearAllPoints()
-	local x = 220 -- 8 + 96 (ScopeTab0) + 4 + 96 (ScopeTab1) + 16
+	local x = 208 -- 8 + 96 (ScopeTab0) + 4 + 96 (ScopeTab1) + 4
 	if scope == 0 then
 		e0:SetPoint("TOPLEFT", "TrinketMenu_SubQueueFrame", "TOPLEFT", x, -8)
 		e0:Show()
