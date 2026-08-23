@@ -67,6 +67,8 @@ function TrinketMenu.OptFrame_OnShow()
 	if TrinketMenu.CurrentlySorting then
 		TrinketMenu.PopulateSort(TrinketMenu.CurrentlySorting)
 	end
+	TrinketMenu.ReflectQueueEnabled()
+	TrinketMenu.UpdateScopeEnableVisibility()
 end
 
 --[[ Minimap button ]]

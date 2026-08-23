@@ -84,6 +84,7 @@ function TrinketMenu.QueueInit()
 	TrinketMenu_SortKeepEquippedText:SetTextColor(.95,.95,.95)
 	TrinketMenu_SortListFrame:SetBackdropBorderColor(.3,.3,.3,1)
 	TrinketMenu.ReflectQueueEnabled()
+	TrinketMenu.UpdateScopeEnableVisibility()
 	TrinketMenu.UpdateCombatQueue()
 	TrinketMenu.BagsNeedUpdating = {}
 	TrinketMenu.CreateTimer("UpdateBaggedTrinkets",TrinketMenu.UpdateBaggedTrinkets,.2)
@@ -101,6 +102,25 @@ function TrinketMenu.ReflectQueueEnabled()
 	if e1 then e1:SetChecked(se[1]) end
 end
 
+-- Show only the CheckButton matching the active scope; re-anchor to its tab.
+function TrinketMenu.UpdateScopeEnableVisibility()
+	local scope = TrinketMenu.CurrentlySortingScope or 0
+	local e0 = getglobal("TrinketMenu_ScopeEnable0")
+	local e1 = getglobal("TrinketMenu_ScopeEnable1")
+	if not (e0 and e1) then return end
+	e0:ClearAllPoints()
+	e1:ClearAllPoints()
+	if scope == 0 then
+		e0:SetPoint("TOPLEFT", "TrinketMenu_ScopeTab0", "TOPRIGHT", 16, 0)
+		e0:Show()
+		e1:Hide()
+	else
+		e1:SetPoint("TOPLEFT", "TrinketMenu_ScopeTab1", "TOPRIGHT", 16, 0)
+		e1:Show()
+		e0:Hide()
+	end
+end
+
 function TrinketMenu.OpenSort(which)
 	TrinketMenu.CurrentlySorting = which
 	TrinketMenu.PopulateSort(which, TrinketMenu.CurrentlySortingScope or 0)
@@ -109,6 +129,7 @@ function TrinketMenu.OpenSort(which)
 	TrinketMenu.SortValidate()
 	TrinketMenu.SortScrollFrameUpdate()
 	TrinketMenu.ValidateChecks()
+	TrinketMenu.UpdateScopeEnableVisibility()
 end
 
 function TrinketMenu.ScopeTab_OnClick()
@@ -125,6 +146,7 @@ function TrinketMenu.ScopeTab_OnClick()
 	TrinketMenu.SortValidate()
 	TrinketMenu.SortScrollFrameUpdate()
 	TrinketMenu.ReflectQueueEnabled()
+	TrinketMenu.UpdateScopeEnableVisibility()
 end
 
 function TrinketMenu.GetID(bag,slot)
