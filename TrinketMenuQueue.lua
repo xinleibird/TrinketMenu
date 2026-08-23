@@ -36,6 +36,7 @@ function TrinketMenu.OpenSort(which)
 	TrinketMenu_SortScrollScrollBar:SetValue(0)
 	TrinketMenu.SortValidate()
 	TrinketMenu.SortScrollFrameUpdate()
+	TrinketMenu.ValidateChecks()
 end
 
 function TrinketMenu.GetID(bag,slot)
