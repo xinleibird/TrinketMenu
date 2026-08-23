@@ -102,7 +102,7 @@ function TrinketMenu.ReflectQueueEnabled()
 	if e1 then e1:SetChecked(se[1]) end
 end
 
--- Show only the CheckButton matching the active scope; re-anchor to its tab.
+-- Show only the CheckButton matching the active scope; place past both scope tabs.
 function TrinketMenu.UpdateScopeEnableVisibility()
 	local scope = TrinketMenu.CurrentlySortingScope or 0
 	local e0 = getglobal("TrinketMenu_ScopeEnable0")
@@ -110,12 +110,13 @@ function TrinketMenu.UpdateScopeEnableVisibility()
 	if not (e0 and e1) then return end
 	e0:ClearAllPoints()
 	e1:ClearAllPoints()
+	local x = 220 -- 8 + 96 (ScopeTab0) + 4 + 96 (ScopeTab1) + 16
 	if scope == 0 then
-		e0:SetPoint("TOPLEFT", "TrinketMenu_ScopeTab0", "TOPRIGHT", 16, 0)
+		e0:SetPoint("TOPLEFT", "TrinketMenu_SubQueueFrame", "TOPLEFT", x, -8)
 		e0:Show()
 		e1:Hide()
 	else
-		e1:SetPoint("TOPLEFT", "TrinketMenu_ScopeTab1", "TOPRIGHT", 16, 0)
+		e1:SetPoint("TOPLEFT", "TrinketMenu_SubQueueFrame", "TOPLEFT", x, -8)
 		e1:Show()
 		e0:Hide()
 	end
