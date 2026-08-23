@@ -173,11 +173,12 @@ function TrinketMenu.GetID(bag, slot)
 end
 
 function TrinketMenu.GetNameByID(id)
-	if not id or id == 0 then
+	if id == 0 then
 		return StopQueueHereText1, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", 1
+	else
+		local name, _, quality, _, _, _, _, _, texture = GetItemInfo(id or "")
+		return name, texture, quality
 	end
-	local name, _, quality, _, _, _, _, _, texture = GetItemInfo(id)
-	return name, texture, quality
 end
 
 -- adds id to which/scope sort if it's not already in the list
@@ -282,15 +283,7 @@ function TrinketMenu.SortTooltip()
 	local which = TrinketMenu.CurrentlySorting or 0
 	local scope = TrinketMenu.CurrentlySortingScope or 0
 	local list = _tm_ensure_sort(which, scope)
-	local itemId = list[idx]
-	if not itemId then
-		return
-	end
-	if itemId == 0 then
-		TrinketMenu.OnTooltip(StopQueueHereText2, StopQueueHereTooltip)
-		return
-	end
-	local _, itemLink = GetItemInfo(itemId)
+	local name, itemLink = GetItemInfo(list[idx] or "")
 	if itemLink and TrinketMenuOptions.ShowTooltips == "ON" then
 		TrinketMenu.AnchorTooltip()
 		GameTooltip:SetHyperlink(itemLink)
