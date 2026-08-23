@@ -164,7 +164,10 @@
 			</Layer>
 		</Layers>
 		<Frames>
-			<CheckButton name="TrinketMenu_OptQueueInInstance" inherits="TrinketMenu_CheckButtonTemplate">
+			<Button name="TrinketMenu_ScopeTab0" inherits="UIPanelButtonGrayTemplate" parent="TrinketMenu_SubQueueFrame" text="In Instance" id="0">
+				<Size>
+					<AbsDimension x="96" y="22"/>
+				</Size>
 				<Anchors>
 					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_SubQueueFrame" relativePoint="TOPLEFT">
 						<Offset>
@@ -172,16 +175,38 @@
 						</Offset>
 					</Anchor>
 				</Anchors>
-			</CheckButton>
-			<CheckButton name="TrinketMenu_OptQueueOutOfInstance" inherits="TrinketMenu_CheckButtonTemplate">
+				<NormalText inherits="GameFontHighlightSmall"/>
+				<DisabledText inherits="GameFontDisableSmall"/>
+				<HighlightText inherits="GameFontHighlightSmall"/>
+				<Scripts>
+					<OnLoad>
+						this:LockHighlight()
+					</OnLoad>
+					<OnClick>
+						TrinketMenu.ScopeTab_OnClick()
+					</OnClick>
+				</Scripts>
+			</Button>
+			<Button name="TrinketMenu_ScopeTab1" inherits="UIPanelButtonGrayTemplate" parent="TrinketMenu_SubQueueFrame" text="Out of Instance" id="1">
+				<Size>
+					<AbsDimension x="96" y="22"/>
+				</Size>
 				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptQueueInInstance" relativePoint="TOPRIGHT">
+					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_ScopeTab0" relativePoint="TOPRIGHT">
 						<Offset>
-							<AbsDimension x="100" y="0"/>
+							<AbsDimension x="4" y="0"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
-			</CheckButton>
+				<NormalText inherits="GameFontHighlightSmall"/>
+				<DisabledText inherits="GameFontDisableSmall"/>
+				<HighlightText inherits="GameFontHighlightSmall"/>
+				<Scripts>
+					<OnClick>
+						TrinketMenu.ScopeTab_OnClick()
+					</OnClick>
+				</Scripts>
+			</Button>
 			<Button name="TrinketMenu_MoveTop" inherits="TrinketMenu_MoveButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">

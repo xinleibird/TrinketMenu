@@ -18,9 +18,7 @@ TrinketMenu.CheckOptInfo = {
 {"SetColumns","OFF","Set Menu Columns","Define how many trinkets before the menu will wrap to the next row.\n\nUncheck to let TrinketMenu choose how to wrap the menu."},
 {"LargeCooldown","ON","Large Numbers","Display the cooldown time in a larger font.","CooldownCount"},
 {"ShowHotKeys","ON","Show Key Bindings","Display the key bindings over the equipped trinkets."},
-{"StopOnSwap","OFF","Stop Queue On Swap","Swapping a passive trinket stops an auto queue.  Check this to also stop the auto queue when a clickable trinket is manually swapped in via TrinketMenu.  This will have the most use to those with frequent trinkets marked Priority."},
-{"QueueInInstance","ON","Queue In Instances","Allow auto queue to run while inside an instance (raid, dungeon, battleground, arena)."},
-{"QueueOutOfInstance","ON","Queue Outside Instances","Allow auto queue to run while outside instances (open world, cities, etc)."}
+{"StopOnSwap","OFF","Stop Queue On Swap","Swapping a passive trinket stops an auto queue.  Check this to also stop the auto queue when a clickable trinket is manually swapped in via TrinketMenu.  This will have the most use to those with frequent trinkets marked Priority."}
 }
 
 TrinketMenu.TooltipInfo = {
@@ -114,14 +112,9 @@ end
 
 function TrinketMenu.ValidateChecks()
 	local check
-	local which = TrinketMenu.CurrentlySorting or 0
 	for i=1,table.getn(TrinketMenu.CheckOptInfo) do
 		check = TrinketMenu.CheckOptInfo[i]
-		if check[1]=="QueueInInstance" or check[1]=="QueueOutOfInstance" then
-			getglobal("TrinketMenu_Opt"..check[1]):SetChecked(TrinketMenuOptions[check[1]][which]=="ON")
-		else
-			getglobal("TrinketMenu_Opt"..check[1]):SetChecked(TrinketMenuOptions[check[1]]=="ON")
-		end
+		getglobal("TrinketMenu_Opt"..check[1]):SetChecked(TrinketMenuOptions[check[1]]=="ON")
 		if check[5] then
 			if TrinketMenuOptions[check[5]]=="ON" then
 				getglobal("TrinketMenu_Opt"..check[1]):Enable()
@@ -148,12 +141,7 @@ end
 function TrinketMenu.CheckButton_OnClick()
 	local _,_,var = string.find(this:GetName(),"TrinketMenu_Opt(.+)")
 	if TrinketMenuOptions[var] then
-		if var=="QueueInInstance" or var=="QueueOutOfInstance" then
-			local which = TrinketMenu.CurrentlySorting or 0
-			TrinketMenuOptions[var][which] = this:GetChecked() and "ON" or "OFF"
-		else
-			TrinketMenuOptions[var] = this:GetChecked() and "ON" or "OFF"
-		end
+		TrinketMenuOptions[var] = this:GetChecked() and "ON" or "OFF"
 		PlaySound(this:GetChecked() and "igMainMenuOptionCheckBoxOn" or "igMainMenuOptionCheckBoxOff")
 		TrinketMenu.ValidateChecks()
 	end

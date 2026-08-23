@@ -25,9 +25,7 @@ TrinketMenuOptions = {
 	SetColumns = "OFF",			-- whether number of columns in menu is chosen automatically
 	Columns = 4,				-- if SetColumns "ON", number of columns before menu wraps
 	ShowHotKeys = "OFF",		-- whether hotkeys show on trinkets
-	StopOnSwap = "OFF",		-- whether to stop auto queue on all manual swaps
-	QueueInInstance = {[0]="ON",[1]="ON"},		-- whether auto queue runs inside instances, per trinket slot
-	QueueOutOfInstance = {[0]="ON",[1]="ON"}	-- whether auto queue runs outside instances, per trinket slot
+	StopOnSwap = "OFF"		-- whether to stop auto queue on all manual swaps
 }
 
 -- per-character settings
@@ -276,18 +274,6 @@ function TrinketMenu.Initialize()
 	options.ShowHotKeys = options.ShowHotKeys or "OFF" -- 3.0
 	TrinketMenuPerOptions.ItemsUsed = TrinketMenuPerOptions.ItemsUsed or {} -- 3.0
 	options.StopOnSwap = options.StopOnSwap or "OFF" -- 3.2
-	-- 3.3 per-queue migration: legacy saved value was a single string; mirror to both trinket slots
-	local function _tm_migrate_queue_flag(v)
-		if type(v) == "table" then
-			v[0] = v[0] or "ON"
-			v[1] = v[1] or "ON"
-			return v
-		end
-		local s = (type(v) == "string") and v or "ON"
-		return {[0]=s,[1]=s}
-	end
-	options.QueueInInstance = _tm_migrate_queue_flag(options.QueueInInstance)
-	options.QueueOutOfInstance = _tm_migrate_queue_flag(options.QueueOutOfInstance)
 
 	if TrinketMenuPerOptions.XPos and TrinketMenuPerOptions.YPos then
 		TrinketMenu_MainFrame:SetPoint("TOPLEFT","UIParent","BOTTOMLEFT",TrinketMenuPerOptions.XPos,TrinketMenuPerOptions.YPos)
@@ -517,9 +503,7 @@ function TrinketMenu.ResetSettings()
 				SetColumns = "OFF",			
 				Columns = 4,				
 				ShowHotKeys = "OFF",
-				StopOnSwap = "OFF",
-				QueueInInstance = {[0]="ON",[1]="ON"},
-				QueueOutOfInstance = {[0]="ON",[1]="ON"}
+				StopOnSwap = "OFF"
 			}
 			TrinketMenuPerOptions=
 			{
@@ -642,11 +626,13 @@ function TrinketMenu.MainTrinket_OnClick()
 	elseif IsAltKeyDown() and TrinketMenu.QueueInit and this:GetID()~=18 then
 		this:SetChecked(0)
 		local which = this:GetID()-13
-		if TrinketMenuQueue.Enabled[which] then
+		local scope = IsInInstance() and 0 or 1
+		TrinketMenuQueue.Enabled[which] = TrinketMenuQueue.Enabled[which] or {}
+		if TrinketMenuQueue.Enabled[which][scope] then
 			TrinketMenu.CombatQueue[this:GetID()-13]=nil
-			TrinketMenuQueue.Enabled[which] = nil
+			TrinketMenuQueue.Enabled[which][scope] = nil
 		else
-			TrinketMenuQueue.Enabled[which] = 1
+			TrinketMenuQueue.Enabled[which][scope] = 1
 		end
 --		TrinketMenuQueue.Enabled[which] = not TrinketMenuQueue.Enabled[which]
 		TrinketMenu.ReflectQueueEnabled()
@@ -666,7 +652,9 @@ function TrinketMenu.MenuTrinket_OnClick()
 		if TrinketMenu.QueueInit and slot~=18 then
 			local _,_,canCooldown = GetContainerItemCooldown(TrinketMenu.BaggedTrinkets[this:GetID()].bag,TrinketMenu.BaggedTrinkets[this:GetID()].slot)
 			if canCooldown==0 or TrinketMenuOptions.StopOnSwap=="ON" then -- if incoming trinket can't go on cooldown
-				TrinketMenuQueue.Enabled[slot-13]=nil -- turn off autoqueue
+				local scope = IsInInstance() and 0 or 1
+				TrinketMenuQueue.Enabled[slot-13] = TrinketMenuQueue.Enabled[slot-13] or {}
+				TrinketMenuQueue.Enabled[slot-13][scope] = nil -- turn off autoqueue for current scope
 				TrinketMenu.ReflectQueueEnabled()
 			end
 		end
@@ -1052,6 +1040,7 @@ end
 
 function TrinketMenu.UpdateCombatQueue()
 	local bag,slot
+	local scope = IsInInstance() and 0 or 1
 	for which=0,1 do
 		local trinket = TrinketMenu.CombatQueue[which]
 		local icon = getglobal("TrinketMenu_Trinket"..which.."Queue")
@@ -1062,7 +1051,7 @@ function TrinketMenu.UpdateCombatQueue()
 				icon:SetTexture(GetContainerItemInfo(bag,slot))
 				icon:Show()
 			end
-		elseif TrinketMenu.QueueInit and TrinketMenuQueue and TrinketMenuQueue.Enabled[which] then
+		elseif TrinketMenu.QueueInit and TrinketMenuQueue and TrinketMenuQueue.Enabled[which] and TrinketMenuQueue.Enabled[which][scope] then
 			icon:SetTexture("Interface\\AddOns\\TrinketMenu\\TrinketMenu-Gear")
 			icon:Show()
 		end
