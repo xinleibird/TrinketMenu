@@ -304,7 +304,7 @@
 					</CheckButton>
 					<CheckButton name="TrinketMenu_OptNotify" inherits="TrinketMenu_CheckButtonTemplate">
 						<Anchors>
-							<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptMenuOnShift" relativePoint="BOTTOMLEFT"/>
+							<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptDisableOnMount" relativePoint="BOTTOMLEFT"/>
 						</Anchors>
 					</CheckButton>
 					<CheckButton name="TrinketMenu_OptNotifyThirty" inherits="TrinketMenu_CheckButtonTemplate">
