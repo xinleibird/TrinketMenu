@@ -436,6 +436,9 @@ end
 
 -- this function quickly checks if conditions are right for a possible ProcessAutoQueue
 function TrinketMenu.PeriodicQueueCheck()
+	if TrinketMenuOptions.DisableOnMount == "ON" and IsMounted() then
+		return
+	end
 	local scope = IsInInstance() and 0 or 1
 	for i = 0, 1 do
 		if

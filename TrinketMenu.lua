@@ -22,6 +22,7 @@ TrinketMenuOptions = {
 	ShowTooltips = "ON", -- whether to display tooltips at all
 	NotifyThirty = "OFF", -- whether to notify cooldowns at 30 seconds instead of 0
 	MenuOnShift = "OFF", -- whether menu requires Shift to display
+	DisableOnMount = "ON", -- whether to disable functionality while mounted
 	TinyTooltips = "OFF", -- whether tooltips display only name and cooldown
 	SetColumns = "OFF", -- whether number of columns in menu is chosen automatically
 	Columns = 4, -- if SetColumns "ON", number of columns before menu wraps
@@ -167,6 +168,9 @@ end
 
 -- scan inventory and build MenuFrame
 function TrinketMenu.BuildMenu()
+	if TrinketMenuOptions.DisableOnMount == "ON" and IsMounted() then
+		return
+	end
 	if not IsShiftKeyDown() and TrinketMenuOptions.MenuOnShift == "ON" then
 		return
 	end
@@ -304,6 +308,7 @@ function TrinketMenu.Initialize()
 	options.ShowHotKeys = options.ShowHotKeys or "OFF" -- 3.0
 	TrinketMenuPerOptions.ItemsUsed = TrinketMenuPerOptions.ItemsUsed or {} -- 3.0
 	options.StopOnSwap = options.StopOnSwap or "OFF" -- 3.2
+	options.DisableOnMount = options.DisableOnMount or "ON"
 
 	if TrinketMenuPerOptions.XPos and TrinketMenuPerOptions.YPos then
 		TrinketMenu_MainFrame:SetPoint(
@@ -555,6 +560,7 @@ function TrinketMenu.ResetSettings()
 				Columns = 4,
 				ShowHotKeys = "OFF",
 				StopOnSwap = "OFF",
+				DisableOnMount = "ON",
 			}
 			TrinketMenuPerOptions = {
 				MainDock = "BOTTOMRIGHT",
@@ -672,6 +678,10 @@ end
 --[[ OnClicks ]]
 
 function TrinketMenu.MainTrinket_OnClick()
+	if TrinketMenuOptions.DisableOnMount == "ON" and IsMounted() then
+		this:SetChecked(0)
+		return
+	end
 	if IsShiftKeyDown() and ChatFrameEditBox:IsVisible() then
 		this:SetChecked(0)
 		ChatFrameEditBox:Insert(GetInventoryItemLink("player", this:GetID()))
@@ -695,6 +705,9 @@ end
 
 function TrinketMenu.MenuTrinket_OnClick()
 	this:SetChecked(0)
+	if TrinketMenuOptions.DisableOnMount == "ON" and IsMounted() then
+		return
+	end
 	if IsShiftKeyDown() and ChatFrameEditBox:IsVisible() then
 		ChatFrameEditBox:Insert(
 			GetContainerItemLink(
@@ -812,6 +825,9 @@ function TrinketMenu.MenuMouseover()
 end
 
 function TrinketMenu.OnTrinketMouseEnter()
+	if TrinketMenuOptions.DisableOnMount == "ON" and IsMounted() then
+		return
+	end
 	TrinketMenu.CurrentMenuSlot = this:GetID()
 	TrinketMenu_MenuFrame:ClearAllPoints()
 	if TrinketMenuPerOptions.MainOrient == "HORIZONTAL" then

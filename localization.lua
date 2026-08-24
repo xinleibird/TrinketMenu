@@ -50,6 +50,7 @@ if GetLocale() == "zhCN" then
 		{ "ShowTooltips", "ON", "显示提示信息", "显示提示信息." },
 		{ "NotifyThirty", "ON", "三十秒提示", "在饰品冷却前三十秒时提示玩家." },
 		{ "MenuOnShift", "OFF", "Shift显示列表", "只有按下Shift才会显示饰品选择列表." },
+		{ "DisableOnMount", "ON", "骑马时禁用", "骑马时禁用 TrinketMenu 所有功能." },
 		{
 			"TinyTooltips",
 			"OFF",

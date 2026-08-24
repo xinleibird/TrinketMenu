@@ -297,6 +297,11 @@
 							<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptKeepOpen" relativePoint="BOTTOMLEFT"/>
 						</Anchors>
 					</CheckButton>
+					<CheckButton name="TrinketMenu_OptDisableOnMount" inherits="TrinketMenu_CheckButtonTemplate">
+						<Anchors>
+							<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptMenuOnShift" relativePoint="BOTTOMLEFT"/>
+						</Anchors>
+					</CheckButton>
 					<CheckButton name="TrinketMenu_OptNotify" inherits="TrinketMenu_CheckButtonTemplate">
 						<Anchors>
 							<Anchor point="TOPLEFT" relativeTo="TrinketMenu_OptMenuOnShift" relativePoint="BOTTOMLEFT"/>

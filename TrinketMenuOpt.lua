@@ -26,6 +26,12 @@ TrinketMenu.CheckOptInfo = {
 	},
 	{ "MenuOnShift", "OFF", "Menu On Shift", "Check this to prevent the menu appearing unless Shift is held." },
 	{
+		"DisableOnMount",
+		"ON",
+		"Disable While Mounted",
+		"Disable all TrinketMenu functionality while mounted.",
+	},
+	{
 		"TinyTooltips",
 		"OFF",
 		"Tiny Tooltips",
