@@ -18,6 +18,9 @@ TrinketMenu.PausedQueue = {}
 TrinketMenu.CurrentlySortingScope = 0
 
 local function _tm_ensure_sort(which, scope)
+	if type(which) ~= "number" or type(scope) ~= "number" then
+		return {}
+	end
 	if type(TrinketMenuQueue) ~= "table" then
 		TrinketMenuQueue = {}
 	end
@@ -39,8 +42,12 @@ function TrinketMenu.QueueInit()
 				TrinketMenuQueue.Enabled[which] = 1
 			end
 			TrinketMenuQueue.ScopeEnabled = TrinketMenuQueue.ScopeEnabled or {}
-			TrinketMenuQueue.ScopeEnabled[which] = TrinketMenuQueue.ScopeEnabled[which] or {}
-			TrinketMenuQueue.ScopeEnabled[which][scope] = TrinketMenuQueue.ScopeEnabled[which][scope] or 1
+			TrinketMenuQueue.ScopeEnabled[which] = type(TrinketMenuQueue.ScopeEnabled[which]) == "table"
+				and TrinketMenuQueue.ScopeEnabled[which]
+				or {}
+			if TrinketMenuQueue.ScopeEnabled[which][scope] == nil then
+				TrinketMenuQueue.ScopeEnabled[which][scope] = 1
+			end
 			TrinketMenu.PausedQueue[which] = TrinketMenu.PausedQueue[which] or {}
 			-- new users: seed stop marker at position 1 so defaults queue nothing
 			if not TrinketMenuQueue.Sort[which][scope][1] then
@@ -107,6 +114,7 @@ function TrinketMenu.OpenSort(which)
 	TrinketMenu.SortValidate()
 	TrinketMenu.SortScrollFrameUpdate()
 	TrinketMenu.ValidateChecks()
+	TrinketMenu.ReflectQueueEnabled()
 	TrinketMenu.UpdateScopeEnableVisibility()
 end
 

@@ -117,7 +117,7 @@ end
 function TrinketMenu.OptFrame_OnShow()
 	TrinketMenu.ValidateChecks()
 	if TrinketMenu.CurrentlySorting then
-		TrinketMenu.PopulateSort(TrinketMenu.CurrentlySorting)
+		TrinketMenu.PopulateSort(TrinketMenu.CurrentlySorting, TrinketMenu.CurrentlySortingScope or 0)
 	end
 	TrinketMenu.ReflectQueueEnabled()
 	TrinketMenu.UpdateScopeEnableVisibility()
