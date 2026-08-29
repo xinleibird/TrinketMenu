@@ -62,7 +62,6 @@ function TrinketMenu.QueueInit()
 	TrinketMenu_SortKeepEquippedText:SetTextColor(0.95, 0.95, 0.95)
 	TrinketMenu_SortListFrame:SetBackdropBorderColor(0.3, 0.3, 0.3, 1)
 	TrinketMenu.ReflectQueueEnabled()
-	TrinketMenu.UpdateScopeEnableVisibility()
 	TrinketMenu.UpdateCombatQueue()
 	TrinketMenu.BagsNeedUpdating = {}
 	TrinketMenu.CreateTimer("UpdateBaggedTrinkets", TrinketMenu.UpdateBaggedTrinkets, 0.2)
@@ -74,35 +73,13 @@ function TrinketMenu.ReflectQueueEnabled()
 	getglobal("TrinketMenu_Trinket1Check"):SetChecked(TrinketMenuQueue.Enabled[1] == 1)
 	local which = TrinketMenu.CurrentlySorting or 0
 	local se = TrinketMenuQueue.ScopeEnabled and TrinketMenuQueue.ScopeEnabled[which] or {}
-	local e0 = getglobal("TrinketMenu_ScopeEnable0")
-	local e1 = getglobal("TrinketMenu_ScopeEnable1")
-	if e0 then
-		e0:SetChecked(se[0])
+	local c0 = getglobal("TrinketMenu_ScopeTab0Check")
+	local c1 = getglobal("TrinketMenu_ScopeTab1Check")
+	if c0 then
+		c0:SetChecked(se[0])
 	end
-	if e1 then
-		e1:SetChecked(se[1])
-	end
-end
-
--- Show only the CheckButton matching the active scope; place past both scope tabs.
-function TrinketMenu.UpdateScopeEnableVisibility()
-	local scope = TrinketMenu.CurrentlySortingScope or 0
-	local e0 = getglobal("TrinketMenu_ScopeEnable0")
-	local e1 = getglobal("TrinketMenu_ScopeEnable1")
-	if not (e0 and e1) then
-		return
-	end
-	e0:ClearAllPoints()
-	e1:ClearAllPoints()
-	local x = 208 -- 8 + 96 (ScopeTab0) + 4 + 96 (ScopeTab1) + 4
-	if scope == 0 then
-		e0:SetPoint("TOPLEFT", "TrinketMenu_SubQueueFrame", "TOPLEFT", x, -8)
-		e0:Show()
-		e1:Hide()
-	else
-		e1:SetPoint("TOPLEFT", "TrinketMenu_SubQueueFrame", "TOPLEFT", x, -8)
-		e1:Show()
-		e0:Hide()
+	if c1 then
+		c1:SetChecked(se[1])
 	end
 end
 
@@ -115,7 +92,6 @@ function TrinketMenu.OpenSort(which)
 	TrinketMenu.SortScrollFrameUpdate()
 	TrinketMenu.ValidateChecks()
 	TrinketMenu.ReflectQueueEnabled()
-	TrinketMenu.UpdateScopeEnableVisibility()
 end
 
 function TrinketMenu.ScopeTab_OnClick()
@@ -134,7 +110,6 @@ function TrinketMenu.ScopeTab_OnClick()
 	TrinketMenu.SortValidate()
 	TrinketMenu.SortScrollFrameUpdate()
 	TrinketMenu.ReflectQueueEnabled()
-	TrinketMenu.UpdateScopeEnableVisibility()
 end
 
 function TrinketMenu.GetID(bag, slot)

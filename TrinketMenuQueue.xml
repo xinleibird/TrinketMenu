@@ -186,6 +186,28 @@
 						TrinketMenu.ScopeTab_OnClick()
 					</OnClick>
 				</Scripts>
+				<Frames>
+					<CheckButton name="TrinketMenu_ScopeTab0Check" inherits="TrinketMenu_CheckButtonTemplate" id="0">
+						<Size>
+							<AbsDimension x="20" y="20"/>
+						</Size>
+						<Anchors>
+							<Anchor point="RIGHT" relativeTo="TrinketMenu_ScopeTab0" relativePoint="RIGHT">
+								<Offset>
+									<AbsDimension x="-4" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								this:SetFrameLevel(getglobal("TrinketMenu_ScopeTab0"):GetFrameLevel()+2)
+							</OnLoad>
+							<OnClick>
+								TrinketMenu.ScopeEnable_OnClick()
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+				</Frames>
 			</Button>
 			<Button name="TrinketMenu_ScopeTab1" inherits="UIPanelButtonGrayTemplate" parent="TrinketMenu_SubQueueFrame" text="Out of Instance" id="1">
 				<Size>
@@ -206,35 +228,29 @@
 						TrinketMenu.ScopeTab_OnClick()
 					</OnClick>
 				</Scripts>
+				<Frames>
+					<CheckButton name="TrinketMenu_ScopeTab1Check" inherits="TrinketMenu_CheckButtonTemplate" id="1">
+						<Size>
+							<AbsDimension x="20" y="20"/>
+						</Size>
+						<Anchors>
+							<Anchor point="RIGHT" relativeTo="TrinketMenu_ScopeTab1" relativePoint="RIGHT">
+								<Offset>
+									<AbsDimension x="-4" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<Scripts>
+							<OnLoad>
+								this:SetFrameLevel(getglobal("TrinketMenu_ScopeTab1"):GetFrameLevel()+2)
+							</OnLoad>
+							<OnClick>
+								TrinketMenu.ScopeEnable_OnClick()
+							</OnClick>
+						</Scripts>
+					</CheckButton>
+				</Frames>
 			</Button>
-			<CheckButton name="TrinketMenu_ScopeEnable0" inherits="TrinketMenu_CheckButtonTemplate" id="0">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_ScopeTab1" relativePoint="TOPRIGHT">
-						<Offset>
-							<AbsDimension x="16" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						TrinketMenu.ScopeEnable_OnClick()
-					</OnClick>
-				</Scripts>
-			</CheckButton>
-			<CheckButton name="TrinketMenu_ScopeEnable1" inherits="TrinketMenu_CheckButtonTemplate" id="1">
-				<Anchors>
-					<Anchor point="TOPLEFT" relativeTo="TrinketMenu_ScopeEnable0" relativePoint="TOPRIGHT">
-						<Offset>
-							<AbsDimension x="100" y="0"/>
-						</Offset>
-					</Anchor>
-				</Anchors>
-				<Scripts>
-					<OnClick>
-						TrinketMenu.ScopeEnable_OnClick()
-					</OnClick>
-				</Scripts>
-			</CheckButton>
 			<Button name="TrinketMenu_MoveTop" inherits="TrinketMenu_MoveButtonTemplate">
 				<Anchors>
 					<Anchor point="TOPLEFT">
