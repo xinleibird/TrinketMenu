@@ -446,6 +446,7 @@ function TrinketMenu.OnEvent()
 			TrinketMenu.CombatQueue[1] = nil
 			TrinketMenu.UpdateCombatQueue()
 		end
+		TrinketMenu.PeriodicQueueCheck()
 	elseif event == "UPDATE_BINDINGS" then
 		TrinketMenu.ReflectKeyBindings()
 	elseif event == "PLAYER_LOGIN" then
