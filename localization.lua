@@ -121,7 +121,7 @@ if GetLocale() == "zhCN" then
 
 	TrinketMenu_SortDelayText1:SetText("延迟")
 	TrinketMenu_SortDelayText2:SetText("秒")
-	TrinketMenu_SortSpellIdText1:SetText("BUFF")
+	TrinketMenu_SortSpellIdText1:SetText("BUFF ID")
 	TrinketMenu_ScopeTab0:SetText("副本内")
 	TrinketMenu_ScopeTab1:SetText("副本外")
 	--TrinketMenu_SortPriorityText:SetText("优先")
