@@ -331,7 +331,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="54" y="8"/>
+							<AbsDimension x="54" y="36"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
@@ -447,7 +447,7 @@
 				<Anchors>
 					<Anchor point="BOTTOMLEFT" relativeTo="TrinketMenu_SubQueueFrame" relativePoint="BOTTOMLEFT">
 						<Offset>
-							<AbsDimension x="54" y="32"/>
+							<AbsDimension x="54" y="8"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
