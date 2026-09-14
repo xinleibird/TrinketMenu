@@ -80,6 +80,11 @@ TrinketMenu.TooltipInfo = {
 		"Pause Queue",
 		"Check this to suspend the auto queue while this trinket is equipped. ie, for Carrot on a Stick if you have a mod to auto-equip it to a slot with Auto Queue active.",
 	},
+	{
+		"TrinketMenu_SortSpellId",
+		"Active Trinket Buff Spell ID",
+		"The spell ID of the buff applied by this trinket's on-use. When this buff is still active on you, the queue will not swap to the next trinket. Leave blank to disable.\n\nRequires SuperWoW. Use /trinket buffs while the trinket's buff is on you to find the spell ID.",
+	},
 }
 
 function TrinketMenu.InitOptions()

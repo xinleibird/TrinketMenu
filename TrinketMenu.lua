@@ -499,6 +499,8 @@ function TrinketMenu.SlashHandler(msg)
 		TrinketMenu.ReflectLock()
 	elseif msg == "reset" then
 		TrinketMenu.ResetSettings()
+	elseif msg == "buffs" then
+		TrinketMenu.DumpPlayerBuffs()
 	elseif string.find(msg, "scale") then
 		local _, _, menuscale = string.find(msg, "scale menu (.+)")
 		if tonumber(menuscale) then
@@ -585,6 +587,27 @@ function TrinketMenu.ResetSettings()
 		end,
 	}
 	StaticPopup_Show("TRINKETMENURESET")
+end
+
+function TrinketMenu.DumpPlayerBuffs()
+	if not GetPlayerBuffID then
+		DEFAULT_CHAT_FRAME:AddMessage(
+			"|cFFAAAAAATrinketMenu:|r GetPlayerBuffID not found. SuperWoW required for spell IDs."
+		)
+		return
+	end
+	DEFAULT_CHAT_FRAME:AddMessage("|cFF33AAFFTrinketMenu:|r Player buffs:")
+	local count = 0
+	for i = 1, 32 do
+		local id = GetPlayerBuffID(i)
+		if id then
+			count = count + 1
+			DEFAULT_CHAT_FRAME:AddMessage(string.format("  slot %d: spellId %d", i, id))
+		end
+	end
+	if count == 0 then
+		DEFAULT_CHAT_FRAME:AddMessage("  (none)")
+	end
 end
 
 --[[ Window Movement ]]

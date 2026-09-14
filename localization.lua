@@ -100,6 +100,11 @@ if GetLocale() == "zhCN" then
 			"暂停自动排队",
 			"选中这个选项,当这个饰品被装备时会暂停自动排队替换. 比如, 你有一个自动换装的插件在你骑马时把棍子上的胡萝卜装备上了.",
 		},
+		{
+			"TrinketMenu_SortSpellId",
+			"主动饰品BUFF法术ID",
+			"该饰品使用后施加的BUFF的法术ID. 当此BUFF仍在身上时, 自动排队不会换上队列里的下一个饰品. 留空禁用.\n\n需要 SuperWoW. 在饰品BUFF生效时使用 /trinket buffs 来获取法术ID.",
+		},
 	}
 
 	TrinketMenu.Tooltip1 = "点击: 开关选项窗口\n拖动: 移动设置按钮"
@@ -116,6 +121,7 @@ if GetLocale() == "zhCN" then
 
 	TrinketMenu_SortDelayText1:SetText("延迟")
 	TrinketMenu_SortDelayText2:SetText("秒")
+	TrinketMenu_SortSpellIdText1:SetText("BUFF")
 	TrinketMenu_ScopeTab0:SetText("副本内")
 	TrinketMenu_ScopeTab1:SetText("副本外")
 	--TrinketMenu_SortPriorityText:SetText("优先")

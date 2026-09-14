@@ -66,6 +66,13 @@ function TrinketMenu.QueueInit()
 	TrinketMenu.BagsNeedUpdating = {}
 	TrinketMenu.CreateTimer("UpdateBaggedTrinkets", TrinketMenu.UpdateBaggedTrinkets, 0.2)
 	TrinketMenu_MainFrame:RegisterEvent("BAG_UPDATE")
+
+	TrinketMenu.SuperWoWPresent = (GetPlayerBuffID ~= nil)
+	if not TrinketMenu.SuperWoWPresent then
+		DEFAULT_CHAT_FRAME:AddMessage(
+			"|cFFAAAAAATrinketMenu:|r SuperWoW not detected. BUFF-gate feature disabled."
+		)
+	end
 end
 
 function TrinketMenu.ReflectQueueEnabled()
@@ -283,15 +290,18 @@ function TrinketMenu.SortValidate()
 		TrinketMenu_SortDelay:Show()
 		TrinketMenu_SortPriority:Show()
 		TrinketMenu_SortKeepEquipped:Show()
+		TrinketMenu_SortSpellId:Show()
 	else
 		TrinketMenu_SortDelay:Hide()
 		TrinketMenu_SortPriority:Hide()
 		TrinketMenu_SortKeepEquipped:Hide()
+		TrinketMenu_SortSpellId:Hide()
 	end
 	local stats = TrinketMenuQueue.Stats[list[TrinketMenu.SortSelected]]
 	TrinketMenu_SortDelay:SetText(stats and (stats.delay or "0") or "0")
 	TrinketMenu_SortPriority:SetChecked(stats and stats.priority)
 	TrinketMenu_SortKeepEquipped:SetChecked(stats and stats.keep)
+	TrinketMenu_SortSpellId:SetText(stats and stats.spellId or "")
 
 	if not IsShiftKeyDown() and selected > 0 then -- keep selected visible on list, moving thumb as needed, unless shift is down
 		local parent = TrinketMenu_SortScrollScrollBar
@@ -339,6 +349,21 @@ function TrinketMenu.SortMove()
 	end
 end
 
+-- Returns true if the player currently has an aura whose spellId matches targetSpellId.
+-- Requires SuperWoW (GetPlayerBuffID).
+function TrinketMenu.HasBuffBySpellId(targetSpellId)
+	if not targetSpellId or not GetPlayerBuffID then
+		return false
+	end
+	for i = 1, 32 do
+		local id = GetPlayerBuffID(i)
+		if id == targetSpellId then
+			return true
+		end
+	end
+	return false
+end
+
 function TrinketMenu.SortDelay_OnTextChanged()
 	local delay = tonumber(TrinketMenu_SortDelay:GetText()) or 0
 	local which = TrinketMenu.CurrentlySorting or 0
@@ -367,6 +392,20 @@ function TrinketMenu.SortKeepEquipped_OnClick()
 	local id = list[TrinketMenu.SortSelected]
 	TrinketMenuQueue.Stats[id] = TrinketMenuQueue.Stats[id] or {}
 	TrinketMenuQueue.Stats[id].keep = check
+end
+
+function TrinketMenu.SortSpellId_OnTextChanged()
+	local text = TrinketMenu_SortSpellId:GetText() or ""
+	local spellId = tonumber(text)
+	local which = TrinketMenu.CurrentlySorting or 0
+	local scope = TrinketMenu.CurrentlySortingScope or 0
+	local list = _tm_ensure_sort(which, scope)
+	local id = list[TrinketMenu.SortSelected]
+	if not id or id == 0 then
+		return
+	end
+	TrinketMenuQueue.Stats[id] = TrinketMenuQueue.Stats[id] or {}
+	TrinketMenuQueue.Stats[id].spellId = (spellId and spellId > 0) and spellId or nil
 end
 
 function TrinketMenu.TabCheck_OnClick()
@@ -460,6 +499,13 @@ function TrinketMenu.ProcessAutoQueue(which, scope)
 			local timeLeft = GetTime() - start
 			-- leave if currently equipped trinket is on cooldown for less than its delay
 			if start > 0 and (duration - timeLeft) > 30 and timeLeft < TrinketMenuQueue.Stats[id].delay then
+				icon:SetDesaturated(1)
+				return
+			end
+		end
+		if TrinketMenuQueue.Stats[id].spellId and TrinketMenuQueue.Stats[id].spellId > 0 then
+			-- leave if the active trinket's on-use buff is still active on the player
+			if TrinketMenu.HasBuffBySpellId(TrinketMenuQueue.Stats[id].spellId) then
 				icon:SetDesaturated(1)
 				return
 			end
