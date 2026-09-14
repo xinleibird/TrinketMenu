@@ -526,7 +526,7 @@
 					</Anchor>
 					<Anchor point="BOTTOMRIGHT">
 						<Offset>
-							<AbsDimension x="-8" y="28"/>
+							<AbsDimension x="-8" y="82"/>
 						</Offset>
 					</Anchor>
 				</Anchors>
