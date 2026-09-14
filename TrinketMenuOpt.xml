@@ -86,7 +86,7 @@
 	</Button>
 
 	<Frame name="TrinketMenu_OptFrame" parent="UIParent" movable="true" toplevel="true" clampedToScreen="true" hidden="true">
-		<Size x="300" y="380"/>
+		<Size x="300" y="354"/>
 		<Anchors>
 			<Anchor point="CENTER"/>
 		</Anchors>
