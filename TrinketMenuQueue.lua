@@ -132,10 +132,12 @@ end
 function TrinketMenu.GetNameByID(id)
 	if id == 0 then
 		return StopQueueHereText1, "Interface\\Buttons\\UI-GroupLoot-Pass-Up", 1
-	else
-		local name, _, quality, _, _, _, _, _, texture = GetItemInfo(id or "")
-		return name, texture, quality
 	end
+	local name, _, quality, _, _, _, _, _, texture = GetItemInfo(id or "")
+	if not name then
+		return nil, nil, nil
+	end
+	return name, texture, quality or 0
 end
 
 -- adds id to which/scope sort if it's not already in the list
@@ -194,16 +196,28 @@ function TrinketMenu.SortScrollFrameUpdate()
 			idx = offset + i
 			if idx <= table.getn(list) then
 				name, texture, quality = TrinketMenu.GetNameByID(list[idx])
-				itemIcon:SetTexture(texture)
-				itemName:SetText(name)
-				r, g, b = GetItemQualityColor(quality)
-				itemName:SetTextColor(r, g, b)
-				itemIcon:SetVertexColor(1, 1, 1)
-				item:Show()
-				if idx == TrinketMenu.SortSelected then
-					TrinketMenu.LockHighlight(item)
+				if name then
+					itemIcon:SetTexture(texture)
+					itemName:SetText(name)
+					if quality then
+						r, g, b = GetItemQualityColor(quality)
+					else
+						r, g, b = 1, 1, 1
+					end
+					itemName:SetTextColor(r, g, b)
+					itemIcon:SetVertexColor(1, 1, 1)
+					item:Show()
+					if idx == TrinketMenu.SortSelected then
+						TrinketMenu.LockHighlight(item)
+					else
+						TrinketMenu.UnlockHighlight(item)
+					end
 				else
-					TrinketMenu.UnlockHighlight(item)
+					itemIcon:SetTexture(nil)
+					itemName:SetText("")
+					itemName:SetTextColor(1, 1, 1)
+					itemIcon:SetVertexColor(1, 1, 1)
+					item:Show()
 				end
 			else
 				item:Hide()
